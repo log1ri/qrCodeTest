@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import QRCodeStyling from 'qr-code-styling';
 import type { QROptions } from '../types';
 
@@ -47,6 +47,7 @@ export default function QRPreview({ content, options }: Props) {
   const containerRef = useRef<HTMLDivElement>(null);
   const qrRef = useRef<QRCodeStyling | null>(null);
   const timerRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+  const [copied, setCopied] = useState(false);
   const isEmpty = !content.trim();
 
   // Init once
@@ -66,6 +67,16 @@ export default function QRPreview({ content, options }: Props) {
     }, 120);
     return () => clearTimeout(timerRef.current);
   }, [content, options]);
+
+  const copyToClipboard = async () => {
+    if (isEmpty) return;
+    const qr = new QRCodeStyling({ ...buildOpts(content, options, DISPLAY_SIZE), type: 'canvas' });
+    const blob = await qr.getRawData('png');
+    if (!blob) return;
+    await navigator.clipboard.write([new ClipboardItem({ 'image/png': blob })]);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
 
   const download = async (fmt: 'png' | 'svg') => {
     if (isEmpty) return;
@@ -117,6 +128,21 @@ export default function QRPreview({ content, options }: Props) {
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M12 4v12m0 0-3-3m3 3 3-3"/>
           </svg>
           SVG
+        </button>
+        <button
+          onClick={copyToClipboard}
+          disabled={isEmpty}
+          className="flex items-center justify-center gap-2 rounded-xl border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 hover:bg-zinc-100 dark:hover:bg-zinc-700 disabled:opacity-40 disabled:cursor-not-allowed px-4 py-2.5 text-base font-medium text-zinc-900 dark:text-white transition"
+        >
+          {copied ? (
+            <svg className="w-4 h-4 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7"/>
+            </svg>
+          ) : (
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/>
+            </svg>
+          )}
         </button>
       </div>
 
