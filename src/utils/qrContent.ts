@@ -1,6 +1,6 @@
-import type { InputType, WiFiData, VCardData } from '../types';
+import type { InputType } from '../types';
 
-export function buildQRContent(type: InputType, data: Record<string, string> & Partial<WiFiData> & Partial<VCardData>): string {
+export function buildQRContent(type: InputType, data: Record<string, string>): string {
   switch (type) {
     case 'url':
       return data.url || '';

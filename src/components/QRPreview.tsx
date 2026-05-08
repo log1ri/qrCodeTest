@@ -46,7 +46,7 @@ function buildOpts(data: string, opts: QROptions, size: number) {
 export default function QRPreview({ content, options }: Props) {
   const containerRef = useRef<HTMLDivElement>(null);
   const qrRef = useRef<QRCodeStyling | null>(null);
-  const timerRef = useRef<ReturnType<typeof setTimeout>>();
+  const timerRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
   const isEmpty = !content.trim();
 
   // Init once

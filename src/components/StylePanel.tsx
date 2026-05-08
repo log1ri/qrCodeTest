@@ -62,7 +62,7 @@ const CORNER_DOT_STYLES: { value: CornerDotStyle; label: string }[] = [
 ];
 
 function ShapeButton<T extends string>({
-  value, selected, label, dotCls, onClick,
+  selected, label, dotCls, onClick,
 }: { value: T; selected: boolean; label: string; dotCls?: string; onClick: () => void }) {
   return (
     <button
