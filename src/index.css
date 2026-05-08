@@ -6,6 +6,8 @@
 @layer base {
   *, *::before, *::after { box-sizing: border-box; }
   body { margin: 0; }
+  html      { background-color: #f4f4f5; } /* zinc-100 */
+  html.dark { background-color: #09090b; } /* zinc-950 */
 }
 
 /* Thin scrollbar for the left panel */
