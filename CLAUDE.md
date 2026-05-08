@@ -24,17 +24,17 @@ bun run lint   # lint
 
 ```
 src/
-  App.tsx                  # layout, state, useIsDesktop hook
-  types.ts                 # InputType, QROptions, DotStyle, etc.
-  index.css                # Tailwind v4 import + dark mode variant + scrollbar styles
-  context/ThemeContext.tsx  # class-based dark/light theme with localStorage
-  utils/qrContent.ts       # buildQRContent(type, data) → QR string
+  App.tsx                   # layout, state, useIsDesktop hook
+  types.ts                  # InputType, QROptions, DotStyle, etc.
+  index.css                 # Tailwind v4 import + dark mode variant + scrollbar styles
+  context/ThemeContext.tsx   # class-based dark/light theme with localStorage
+  utils/qrContent.ts        # buildQRContent(type, data) → QR string
   components/
-    QRPreview.tsx           # QR rendering + PNG/SVG download
-    LeftPanel.tsx           # type tabs + all accordion sections
-    InputPanel.tsx          # per-type form fields
-    Collapsible.tsx         # smooth accordion (CSS grid trick)
-    StylePanel.tsx          # standalone style panel (unused in current layout)
+    QRPreview.tsx            # QR rendering, PNG/SVG download, copy to clipboard
+    LeftPanel.tsx            # type tabs + all accordion sections
+    InputPanel.tsx           # per-type form fields
+    Collapsible.tsx          # smooth accordion (CSS grid trick)
+    StylePanel.tsx           # standalone style panel (unused in current layout)
 ```
 
 ## Key decisions
@@ -44,3 +44,5 @@ src/
 - Two-layer scroll: outer `overflow-hidden rounded-2xl` shell + inner `overflow-y-auto` to keep rounded corners while scrolling
 - Mobile: QR preview on top (`order-1`), controls below (`order-2`); desktop reverses via flex order
 - Default quiet zone: 2 modules
+- Copy to clipboard uses `navigator.clipboard.write()` with `ClipboardItem` at `DISPLAY_SIZE` (320px)
+- `html` background is set in `index.css` to match app background so iOS overscroll doesn't flash white
